@@ -12,7 +12,7 @@
 
 gitee：
 ```
-https://raw.giteeusercontent.com/contion93/ftyg/raw/main/db.json
+https://raw.giteeusercontent.com/contion93/ftyg/raw/main/db.jpg
 ```
 
 github（CDN）：
