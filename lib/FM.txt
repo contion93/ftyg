@@ -1,0 +1,5 @@
+调频,#genre#
+西安音乐广播,http://stream3.xiancity.cn/4/sd/live.m3u8
+厦门音乐广播,https://lhttp.qingting.fm/live/1739/64k.mp3
+音乐之声,https://rscdn.ajmide.com/r_69/live_69.m3u8?audio
+中国之声,http://ngcdn001.cnr.cn/live/zgzs/index.m3u8
