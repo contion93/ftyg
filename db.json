@@ -704,11 +704,18 @@
         },
         {
             "name": "央视频",
-            "url": "https://capi.yangshipin.cn/api/oms/pc/navigation/home_top_nav",
-            "epg": "https://gh-proxy.com/raw.githubusercontent.com/kuke31/xmlgz/main/e.xml.gz",
             "api": "./lib/yangshipin.py",
             "timeZone": "Asia/Shanghai",
-            "timeout": 30
+            "timeout": 20,
+            "epg": "https://gh-proxy.com/raw.githubusercontent.com/kuke31/xmlgz/main/e.xml.gz"
+        },
+        {
+            "name": "咪咕",
+            "api": "./lib/migu.py",
+            "timeZone": "Asia/Shanghai",
+            "timeout": 20,
+            "epg": "https://contion.dynv6.net:7443/diyp/?ch={name}",
+            "logo": "https://contion.dynv6.net:7443/diyp/logo.php?ch={name}"
         },
         {
             "name": "广播",
