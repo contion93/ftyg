@@ -1,10 +1,10 @@
 {
-    "spider": "./spd.zip;md5;42869e09ec9d744c7ab61b6ae27839b8",
+    "spider": "./spd.zip;md5;654fb7dcb0aeaaea7dba0e662395f38e",
     "wallpaper": "https://动态壁纸.饭.eu.org/",
     "sites": [
         {
             "key": "点我切源",
-            "name": "饭太硬改 1021",
+            "name": "饭太硬改 1022",
             "type": 3,
             "api": "csp_DouDouGuard",
             "indexs": 1,
@@ -698,25 +698,21 @@
     "lives": [
         {
             "name": "Kimentanm",
-            "type": 0,
-            "url": "https://ghclone.com/raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
-            "playerType": 2,
-            "epg": "https://ghclone.com/raw.githubusercontent.com/kuke31/xmlgz/main/e.xml.gz",
+            "url": "https://gh-proxy.com/raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
+            "epg": "https://gh-proxy.com/raw.githubusercontent.com/kuke31/xmlgz/main/e.xml.gz",
             "logo": "https://gcore.jsdelivr.net/gh/contion93/ftyg/logo/{name}.png"
         },
         {
             "name": "央视频",
             "url": "https://capi.yangshipin.cn/api/oms/pc/navigation/home_top_nav",
+            "epg": "https://gh-proxy.com/raw.githubusercontent.com/kuke31/xmlgz/main/e.xml.gz",
             "api": "./lib/yangshipin.py",
             "timeZone": "Asia/Shanghai",
-            "timeout": 30,
-            "epg": "https://ghclone.com/raw.githubusercontent.com/kuke31/xmlgz/main/e.xml.gz"
+            "timeout": 30
         },
         {
             "name": "广播",
-            "type": 0,
             "url": "./lib/FM.txt",
-            "playerType": 2,
             "logo": "https://gcore.jsdelivr.net/gh/contion93/ftyg/logo/{name}.jpg"
         }
     ]

@@ -22,5 +22,5 @@ https://gcore.jsdelivr.net/gh/contion93/ftyg/db.json
 
 github（加速）：
 ```
-https://ghclone.com/raw.githubusercontent.com/contion93/ftyg/main/db.json
+https://gh-proxy.com/raw.githubusercontent.com/contion93/ftyg/main/db.json
 ```
