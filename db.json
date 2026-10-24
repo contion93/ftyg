@@ -1,10 +1,10 @@
 {
-    "spider": "./spd.zip;md5;654fb7dcb0aeaaea7dba0e662395f38e",
+    "spider": "./spd.zip;md5;b55978c4fe6d12e2fea9075f17c8a67a",
     "wallpaper": "https://动态壁纸.饭.eu.org/",
     "sites": [
         {
             "key": "点我切源",
-            "name": "饭太硬改 1022",
+            "name": "饭太硬改 1024",
             "type": 3,
             "api": "csp_DouDouGuard",
             "indexs": 1,
