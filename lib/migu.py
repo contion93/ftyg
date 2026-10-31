@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-"""咪咕點播、直播與體育賽事；使用 CatVodSpider 的 net、page、web 與 proxy 接口。"""
-
 import hashlib
 import json
 import os
@@ -9,9 +6,7 @@ import time
 import uuid
 from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs, unquote, urlencode, urlsplit
-
 from base.spider import Spider as BaseSpider
-
 
 PC_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
          "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -45,9 +40,6 @@ CHANNEL_TYPES = SEARCH_TYPES | {"VERTICAL", "VERTICAL_ALBUM"}
 
 
 class Spider(BaseSpider):
-    def getName(self):
-        return "咪咕视频"
-
     def init(self, extend=""):
         if extend is None or extend == "":
             options = {}
@@ -148,7 +140,6 @@ class Spider(BaseSpider):
             auth = self._credentials(info)
             if legacy is not None and legacy != auth:
                 raise ValueError("咪咕：網頁登入資料不同步，請重新登入")
-            # SDK 的內層 userInfo 可能是 JSON 或加密資料，只採用明確的過期時間。
             inner = info.get("userInfo")
             if isinstance(inner, str):
                 try:
@@ -254,8 +245,8 @@ class Spider(BaseSpider):
                 remark = "直播" if live else (str(item["score"]) + "分" if item.get("score") else "")
             ident = "live/" + pid if is_live else pid
             cards.setdefault(ident, {"vod_id": ident, "vod_name": name, "vod_pic": self._picture(item, live),
-                                     "vod_remarks": str(remark),
-                                     "style": {"type": "list"} if live else {"type": "rect", "ratio": 0.75}})
+                "vod_remarks": str(remark),
+                "style": {"type": "list"} if live else {"type": "rect", "ratio": 0.75}})
         return list(cards.values())
 
     @staticmethod
@@ -326,7 +317,6 @@ class Spider(BaseSpider):
             if not isinstance(ident, str) or not ident:
                 raise ValueError("咪咕頻道：分組 ID 格式改變")
             expected.add(ident)
-            # 官網可將子群組放在其他來源頁；依所選頁的明確引用判定歸屬。
             for component in self._records(group.get("components", []), "頻道元件"):
                 extra = component.get("extraData")
                 if not isinstance(extra, dict) or "groupId" not in extra:
@@ -361,7 +351,7 @@ class Spider(BaseSpider):
                 raise ValueError("咪咕導航：入口網址格式改變")
             target = urlsplit(url)
             if not sports and (target.hostname != "www.miguvideo.com"
-                               or target.path != "/mgs/website/prd/index.html"):
+                    or target.path != "/mgs/website/prd/index.html"):
                 continue
             menus = self._records(tab.get("secondBarNames"), "導航子分類")
             for menu in menus[:1] if sports else menus:
@@ -386,14 +376,12 @@ class Spider(BaseSpider):
 
     def _navigation(self):
         def load():
-            # 無 ID 入口由官網選擇目前首頁，導航頁、分類與首頁 ID 都從回應取得。
             response = self.net.req(WEB + "p/channel", PAGE_OPTIONS)
             html = self._check_response(response, "咪咕導航")
             pages, groups = self._page_data(html)
             channels, home = self._nav_channels(pages)
             groups = self._page_groups(pages, groups, home)
             if groups is None:
-                # 導航第一項與官網預載頁可能不同；明確載入所選首頁，避免掛錯清單。
                 response = self.net.req(WEB + "p/channel/" + home, PAGE_OPTIONS)
                 html = self._check_response(response, "咪咕首頁")
                 pages, groups = self._page_data(html)
@@ -496,12 +484,11 @@ class Spider(BaseSpider):
         return self.net.cached("migu:live:catalog", {"ttl": PUBLIC_TTL, "stale": False}, load)
 
     def liveContent(self, url=""):
-        # 分類、篩選與直播共用目錄；切台時才取得短效播放網址。
         catalog = self._live_catalog()
         result = []
         for group in catalog["groups"]:
             channels = [{"name": item["vod_name"], "ua": APP_UA, "format": HLS_MIME,
-                         "urls": [self.getProxyUrl({"migu": "live", "id": item["vod_id"][5:]}) + "$咪咕"]}
+                         "urls": [self.proxyUrl({"migu": "live", "id": item["vod_id"][5:]}) + "$咪咕"]}
                         for item in catalog["items"][group["id"]]]
             if channels:
                 result.append({"name": group["name"], "channel": channels})
@@ -511,7 +498,6 @@ class Spider(BaseSpider):
         body = self._body(self.net.json(GW + path, {'headers': WEB_HEADERS, 'timeout': 20000}), operation)
         if body.get('resultCode', 'SUCCESS') != 'SUCCESS':
             raise ValueError(operation + '：站點未返回成功資料')
-        # basic-data 的有效回應使用 initialized=false，其他賽事 API 則需完成載入。
         if '/basic-data/' not in path and body.get('initialized') is not True:
             raise ValueError(operation + '：站點資料尚未準備完成')
         return body
@@ -680,7 +666,6 @@ class Spider(BaseSpider):
             rows = window['matches'].get(date, [])
         else:
             rows = [row for day in window['days'] for row in window['matches'].get(day, [])]
-        # 同次載入共用時間，避免篩選、排序與卡片跨過開播／結束邊界。
         now = int(time.time() * 1000)
         items = []
         for row in rows:
@@ -806,7 +791,6 @@ class Spider(BaseSpider):
         return self._body(self.net.json(PLAY_HOST, {"params": params, "headers": headers, "timeout": 20000}), "咪咕播放")
 
     def _ddcalcu(self, pudata, pid, rate, user_id):
-        # 標清請求不攜帶 UserId，簽名也使用匿名 ID。
         uid = user_id if rate != 2 else ""
         word = "v"
         if 3 < len(uid) <= 8:
@@ -829,7 +813,6 @@ class Spider(BaseSpider):
             parsed = urlsplit(url)
             if parsed.scheme not in ("http", "https") or not parsed.hostname:
                 raise ValueError
-            # urlsplit 不會自動驗證 port；Location 不接受未編碼空白或控制字元。
             parsed.port
         except ValueError:
             raise ValueError("咪咕播放：媒體網址格式改變") from None
@@ -840,7 +823,6 @@ class Spider(BaseSpider):
         if "puData" in params and "ddCalcu" not in params:
             query = urlencode({"ddCalcu": self._ddcalcu(params["puData"][0], pid, rate, user_id),
                                "sv": "10004", "ct": "android"})
-            # 原始 query 含上游簽名，不重新編碼或調整順序。
             url = parsed._replace(query=parsed.query + "&" + query).geturl()
         return url
 
@@ -879,7 +861,6 @@ class Spider(BaseSpider):
                     logined = api_auth.get("logined")
                     if "logined" in api_auth and not isinstance(logined, bool):
                         raise ValueError("咪咕播放：登入狀態格式改變")
-                    # API 有時接受請求但以匿名身份返回網址，不能套用會員簽名。
                     if logined is False:
                         signed_uid = ""
                 actual_id = self._id(content.get("contId") or pid, "簽名節目 ID")
@@ -901,7 +882,7 @@ class Spider(BaseSpider):
         text = str(id or "")
         return dict(self._resolve(text[5:] if text.startswith("live/") else text), parse=0, jx=0, playUrl="")
 
-    def localProxy(self, params):
+    def proxy(self, params):
         headers = {"Cache-Control": "no-store"}
         if not isinstance(params, dict) or params.get("migu") != "live":
             return [404, "text/plain; charset=utf-8", "未知的咪咕代理入口", headers]
@@ -949,7 +930,6 @@ class Spider(BaseSpider):
                 raise ValueError("咪咕搜尋：影片資料格式改變")
             if self._program_type(item) in SEARCH_TYPES:
                 items.append(item)
-        # totalCount 包含非影片項目，過濾後不回傳假的精確影片總數。
         return {"list": self._cards(items), "page": page, "pagecount": max(1, pages), "limit": SEARCH_SIZE}
 
     def destroy(self):
