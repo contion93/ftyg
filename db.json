@@ -1,10 +1,10 @@
 {
-    "spider": "./spd.zip;md5;6ef2e95b434509eed5b943aa44bb3fdf",
+    "spider": "./spd.zip;md5;0ce2eae734b7eff47763f3f9e1d8525b",
     "wallpaper": "https://动态壁纸.饭.eu.org/",
     "sites": [
         {
             "key": "点我切源",
-            "name": "饭太硬改 1118",
+            "name": "饭太硬改 1121",
             "type": 3,
             "api": "csp_DouDouGuard",
             "indexs": 1,
@@ -125,6 +125,17 @@
             "playerType": 2
         },
         {
+            "key": "韩剧",
+            "name": "🐱韩迷┃外剧",
+            "type": 3,
+            "api": "csp_HanquanGuard",
+            "timeout": 20,
+            "searchable": 1,
+            "quickSearch": 1,
+            "changeable": 1,
+            "playerType": 2
+        },
+        {
             "key": "光影",
             "name": "🌞光影┃不卡",
             "type": 3,
@@ -185,16 +196,19 @@
             "playerType": 2
         },
         {
-            "key": "海绵",
-            "name": "🐬海绵┃不卡",
+            "key": "花生",
+            "name": "🥜花生┃不卡",
             "type": 3,
-            "api": "csp_HmysGuard",
-            "timeout": 10,
-            "playerType": 2,
-            "searchable": 0,
-            "quickSearch": 0,
-            "changeable": 0,
-            "hide": 1
+            "api": "csp_HuashuGuard",
+            "style": {
+                "type": "rect",
+                "ratio": 1.597
+            },
+            "searchable": 1,
+            "quickSearch": 1,
+            "changeable": 1,
+            "timeout": 20,
+            "playerType": 2
         },
         {
             "key": "糯米",
